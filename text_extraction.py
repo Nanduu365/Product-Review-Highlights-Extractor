@@ -53,14 +53,8 @@ def video_name_from_path(path:str):
     return video_name
 
 
-create_and_delete_folders(['video_segments','audio_segments'])
-delete_files(['text_segments.txt'])
-
-
-video_path = r"user_uploaded_video\\Macbook Air Review.mp4"
-video_segments_folder = r'video_segments'
-audio_segments_folder = r'audio_segments'
-
+# create_and_delete_folders(['video_segments','audio_segments'])
+# delete_files(['text_segments.txt'])
 
 #extracting the scenes based on the cuts--- if the cuts are too smooth, scenes will not be detected
 
@@ -136,7 +130,7 @@ class VideoToTextExtractor():
 
 
 
-    def audio_extractor(self,video_dir = video_segments_folder,audio_dir = audio_segments_folder):
+    def audio_extractor(self,video_dir = 'video_segments',audio_dir = 'audio_segments'):
         '''Extracting audio for each video in video_dir and saving it to audio_dir'''
 
         print('Extracting audios.....')
@@ -150,7 +144,7 @@ class VideoToTextExtractor():
             ffmpeg.input(video_path).output(output_audio_path).run(quiet= True)
     
 
-    def text_from_audio(self,audio_dir = audio_segments_folder):
+    def text_from_audio(self,audio_dir = 'audio_segments'):
         '''Creates a txt file with each line in txt represents the text 
         from each segment of the video'''
         print('Extracting Text.....')
@@ -174,9 +168,9 @@ class VideoToTextExtractor():
         
 
 
-extractor = VideoToTextExtractor()
-extractor.scene_extractor(video_path=video_path, output_dir=video_segments_folder)
-# extractor.rename_extracted_scenes(video_segments_folder)
-extractor.audio_extractor(audio_dir=audio_segments_folder, video_dir=video_segments_folder)
-extractor.text_from_audio(audio_dir= audio_segments_folder)
+# extractor = VideoToTextExtractor()
+# extractor.scene_extractor(video_path=video_path, output_dir=video_segments_folder)
+# # extractor.rename_extracted_scenes(video_segments_folder)
+# extractor.audio_extractor(audio_dir=audio_segments_folder, video_dir=video_segments_folder)
+# extractor.text_from_audio(audio_dir= audio_segments_folder)
 

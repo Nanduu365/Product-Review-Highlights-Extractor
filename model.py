@@ -1,15 +1,17 @@
 from dotenv import load_dotenv
 import os
 import subprocess
+from google import genai
+import json
+from text_extraction import video_path, video_segments_folder,video_name_from_path
 
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
 
-# from google import genai
 
-text_segments_file = 'text_segments.txt'
+
 
 system_prompt  = '''
 
@@ -725,7 +727,7 @@ USER:
 
 '''
 
-def preprocess_prompt(system_prompt):
+def preprocess_prompt(system_prompt, text_segments_file):
     '''Take the text from txt file and format it in a properform for 
     making the prompt for model'''
 
@@ -740,7 +742,65 @@ def preprocess_prompt(system_prompt):
     return system_prompt+user_prompt
     
 
-query = preprocess_prompt(system_prompt)
+def generate_response(query, api_key = GOOGLE_API_KEY):
 
-# print(query)
+  # print(query)
+  client = genai.Client(api_key = api_key)
 
+  response = response = client.models.generate_content(
+      model = "gemini-2.0-flash",
+      contents = [query]
+  )
+
+  json_response =json.loads(response)
+
+  return json_response
+  
+
+
+#Scene by scene video collection from text
+
+def merge_videos(json_response):
+
+  none_of_the_above = []
+  feature_demonstration = []
+  product_unboxing = []
+  final_verdict = []
+
+
+  for i in range(len(json_response)):
+    title = json_response[f'scene {i}']['title']
+
+    path_to_video = os.path.join(video_segments_folder,f'-Scene-{i}.mp4')
+
+    if title == 'none of the above':
+      none_of_the_above.append(path_to_video)
+    elif title == 'feature demonstration':
+      feature_demonstration.append(path_to_video)
+    elif title == 'product unboxing':
+      product_unboxing.append(path_to_video)
+    elif title == 'final verdict':
+      final_verdict.append(path_to_video)
+
+
+  with open('none_of_the_above.txt','w') as f:
+    for path in none_of_the_above:
+      f.write(f"file '{path}'\n")
+
+  with open('product_unboxing.txt','w') as f:
+    for path in product_unboxing:
+      f.write(f"file '{path}'\n")
+
+  with open('feature_demonstration.txt','w') as f:
+    for path in feature_demonstration:
+      f.write(f"file '{path}'\n")
+
+  with open('final_verdict.txt','w') as f:
+    for path in final_verdict:
+      f.write(f"file '{path}'\n")
+
+  for txt in ['none_of_the_above','product_unboxing','feature_demonstration','final_verdict']:
+    subprocess.run(['ffmpeg','-f','concat','-safe','0',
+                  '-i',f'{txt}.txt',
+                    '-c:v','libx264','-c:a','aac',
+                  f'results/{txt}.mp4'])

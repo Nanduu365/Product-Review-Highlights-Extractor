@@ -1,0 +1,134 @@
+from flask import Flask, render_template,redirect,request, send_from_directory, url_for
+from werkzeug.utils import secure_filename
+import os
+from threading import Thread
+import time
+from text_extraction import create_and_delete_folders, delete_files, VideoToTextExtractor
+from model import system_prompt, preprocess_prompt, generate_response, merge_videos
+
+
+app = Flask(__name__)
+UPLOAD_FOLDER = 'static/video'
+RESULT_FOLDER = 'results'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['RESULT_FOLDER'] = RESULT_FOLDER/
+
+
+
+#create upload folder if it does not exist
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(RESULT_FOLDER, exist_ok=True)
+text_segments_file = 'text_segments.txt'
+
+# create_and_delete_folders()
+# delete_files()
+
+
+@app.route('/', methods = ['POST','GET'])
+def home():
+    clean_up()
+
+
+    if request.method == 'POST':
+        video = request.files['video']
+
+        filename = secure_filename(video.filename)
+        filepath = 'static/video/' + filename
+        video.save(filepath)
+        flag = True
+        
+
+        return render_template('home.html', tasks = [flag,filename])
+    
+    else:
+        return render_template('home.html', tasks=[False,None])
+
+
+
+@app.route('/results/<filename>')
+def load_results(filename):
+    return send_from_directory(app.config['RESULT_FOLDER'], filename)
+
+
+@app.route('/loading')
+def loading():
+
+    video_names = os.listdir('user_uploaded_video')
+    video_path = rf"user_uploaded_video\\{video_names[0]}"
+    video_segments_folder = r'video_segments'
+    audio_segments_folder = r'audio_segments'
+
+    extractor = VideoToTextExtractor()
+    extractor.scene_extractor(video_path=video_path, output_dir=video_segments_folder)
+    extractor.audio_extractor(audio_dir=audio_segments_folder, video_dir=video_segments_folder)
+    extractor.text_from_audio(audio_dir= audio_segments_folder)
+
+
+    query = preprocess_prompt(system_prompt)
+    json_response = generate_response(query)
+    merge_videos(json_response)
+    return render_template('loading.html')
+
+
+@app.route('/get_value')
+def update_progress_bar()
+
+
+
+
+@app.route('/highlights/')
+def highlights():
+    time.sleep(5)
+    return render_template('loaded.html')
+    # filenames = os.listdir(app.config['RESULT_FOLDER'])
+    # if filenames == []:
+    #     time.sleep(5)
+    #     return render_template('home.html', tasks=[False,None])
+    # else:
+    #     names = [name.split('.mp4')[0] for name in filenames if name.endswith('.mp4')]
+    #     names = create_titles(names)
+    #     sources = [url_for('load_results', filename=name) for name in filenames]
+        
+
+    #     return render_template('highlights.html', sources = sources, names = names)
+
+# def check_upload_status():
+#     global load
+#     while load != 1:
+#         names = os.listdir(app.config['UPLOAD_FOLDER'])
+#         if len(names) >0:
+#             load = 1
+#         time.sleep(0.1)
+
+# def show_upload_progress():
+#     thread_1 = Thread(target= check_upload_status)
+#     thread_1.start()
+
+def clean_up():
+    global load
+    load = 0
+
+    folders = [app.config['UPLOAD_FOLDER'],app.config['RESULT_FOLDER']]
+
+    for folder in folders:
+        files = os.listdir(folder)
+
+        for file in files:
+            os.remove(os.path.join(folder,file))
+    
+
+def create_titles(names):
+    result = []
+    for name in names:
+        if name == 'feature_demonstration':
+            result.append('FEATURE DEMONSTRATION')
+        if name == 'final_verdict':
+            result.append('FINAL VERDICT')
+        if name == 'product_unboxing':
+            result.append('PRODUCT UNBOXING')
+    return result
+        
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

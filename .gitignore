@@ -5,8 +5,9 @@
 #specific directories
 video_segments/
 audio_segments/
-my_env/
+my_venv/
 
 #specific files
 text_segments.txt
 "user_uploaded_video\videoplayback (2).mp4"
+__pycache__
