@@ -41,10 +41,10 @@
 
 #box_1 {
     margin-top: 75px;
-    margin-left: 100px;
+    margin-left: 150px;
     /* background-color: aqua; */
     width:40%;
-    height: 80%;
+    height: 50%;
 
     margin-bottom: 0px;
 }
@@ -56,6 +56,7 @@
     /* background-color: aqua; */
     width:50%;
     height:80%;
+    align-items: center;
 
 }
 #box_1 h1 {
@@ -88,33 +89,49 @@
 
 
 #home_img {
-    width: 70%;
-    height:70%;
+    width: 80%;
+    height:80%;
     object-fit: contain;
-    margin-left: 75px;
+    margin-left: 60px;
+    
 }
+
+#home_img:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
 
 
 #buttons {
-    margin-top: 0px;
+    margin-top: -250px;
     margin-bottom: 100px;
     /* background-color: aqua; */
     display: flex;
+    /* gap: 10px; */
+    padding: 0%;
 }
 
 #video_upload {
     display: none;
+    /* width: 0px;
+    height: 0px; */
+}
+
+#video_preview {
+    width: 80%;
+    height:80%;
+    object-fit: contain;
 }
 
 #submit {
     margin-left: 10px;
+    margin-right: 0px;
     padding: 10px 20px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
     transition: background-color 0.3s ease; 
     margin-top: 0px;
-    margin-left: 150px;
     background-color: white;
     border: solid, rgb(144, 97, 237);
     border-width: 2px;
@@ -131,13 +148,14 @@
 
 #custom_file_upload {
     /* border: 2px solid #4CAF50; */
+    margin-right: 0px;
+    margin-left: 150px;
     padding: 10px 20px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
     transition: background-color 0.3s ease; 
     margin-top: 0px;
-    margin-left: 150px;
     background-color: rgb(144, 97, 237);
     border: none;
     color: white;
@@ -147,6 +165,41 @@
 #custom_file_upload:hover {
     background-color: rgb(117, 54, 244);
 }
+
+
+#extract_button {
+
+    margin-left: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    border-radius: 6px;
+    transition: background-color 0.3s ease; 
+    margin-top: 0px;
+    background-color: rgb(144, 97, 237);
+    border: none;
+    color: white;
+    text-align: center;
+    transition: background-color 0.3s ease;
+
+}
+
+#extract_button:hover {
+    background-color: rgb(117, 54, 244);
+}
+
+
+
+#myprogressBar {
+    width: 0%;
+    display: none;
+    /* height: 20px;  */
+  } 
+
+#progress_container {
+    margin-bottom: 50px;
+}
+
 
 body {
     background-color: white;

@@ -7,7 +7,8 @@
 function update() {
     var element = document.getElementById("myprogressBar");   
     let width = 1;
-    var identity = setInterval(scene, 10);
+    var identity = setInterval(scene, 1500);
+    element.style.display = 'block';
 
 
     function scene() {
@@ -16,8 +17,16 @@ function update() {
             width = data.value;
             if (width >= 100) {
                 clearInterval(identity);
-            } else {
-                element.style.width = width + '%';}
+                // Redirect to another page
+                window.location.href = '/highlights';
+            } 
+            else {
+                element.style.width = width + '%';
+                element.innerHTML = width + '%';}
             })
         }
+}
+
+if (window.location.pathname === '/loading') {
+    update();
 }

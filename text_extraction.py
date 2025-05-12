@@ -26,7 +26,8 @@ def create_and_delete_folders(folder_names:list):
 
 def delete_files(file_names:list):
     for file in file_names:
-        os.remove(file)
+        if os.path.exists(file):
+            os.remove(file)
 
 
 # def edited_number(num:int):
@@ -75,10 +76,12 @@ class VideoToTextExtractor():
                 end_time = scene[1].get_timecode()
                 output_pattern = f'video_segments/-Scene-{i}.mp4'
 
-                subprocess.run([
-                    'ffmpeg','-loglevel', 'error','-i', video_path,'-ss',str(start_time),
-                    '-to',str(end_time),'-c','copy',output_pattern
-                ])
+                
+                split_video_ffmpeg(video_path, scene_list, output_dir='video_segments')
+                # subprocess.run([
+                #     'ffmpeg','-loglevel', 'error','-i', video_path,'-ss',str(start_time),
+                #     '-to',str(end_time),'-c','copy',output_pattern
+                # ])
             self.flag = True #setting true to indicate that we successfully extracted scenes
         else:
             print("No scenes detected in the video,Segmenting on a constant period...")
@@ -153,11 +156,16 @@ class VideoToTextExtractor():
 
         sorted_audio_names = sorted(os.listdir(audio_dir))
 
+        if not os.path.exists(text_segments_file):
+                with open(text_segments_file,'w') as f:
+                    pass
+
         for i,audio in enumerate(sorted_audio_names):
             audio_path = os.path.join(audio_dir,audio)
             segments,_ = model.transcribe(audio_path)
             text = " ".join(segment.text for segment in segments)   #this is a generator object, it is usually put in (), but it can be given without () if it is the only argument to a function
 
+            
             with open(text_segments_file,'a') as f:
                 f.write(text + '\n')
 

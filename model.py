@@ -3,14 +3,25 @@ import os
 import subprocess
 from google import genai
 import json
-from text_extraction import video_path, video_segments_folder,video_name_from_path
+# from text_extraction import VideoToTextExtractor, create_and_delete_folders,delete_files
 
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
+# create_and_delete_folders(['video_segments','audio_segments'])
+# delete_files(['text_segments.txt'])
+
+# video_path = r'static\video\videoplayback.mp4'
+# video_segments_folder = 'video_segments'
+# audio_segments_folder = 'audio_segments'
 
 
+# extractor = VideoToTextExtractor()
+# extractor.scene_extractor(video_path=video_path, output_dir=video_segments_folder)
+# # extractor.rename_extracted_scenes(video_segments_folder)
+# extractor.audio_extractor(audio_dir=audio_segments_folder, video_dir=video_segments_folder)
+# extractor.text_from_audio(audio_dir= audio_segments_folder)
 
 
 system_prompt  = '''
@@ -747,12 +758,15 @@ def generate_response(query, api_key = GOOGLE_API_KEY):
   # print(query)
   client = genai.Client(api_key = api_key)
 
-  response = response = client.models.generate_content(
+  response = client.models.generate_content(
       model = "gemini-2.0-flash",
-      contents = [query]
+      contents = [query],
+      config={
+        "response_mime_type": "application/json",
+        "temperature": 0.3}
   )
 
-  json_response =json.loads(response)
+  json_response =json.loads(response.text)
 
   return json_response
   
@@ -760,7 +774,7 @@ def generate_response(query, api_key = GOOGLE_API_KEY):
 
 #Scene by scene video collection from text
 
-def merge_videos(json_response):
+def merge_videos(video_segments_folder,json_response):
 
   none_of_the_above = []
   feature_demonstration = []
@@ -772,6 +786,7 @@ def merge_videos(json_response):
     title = json_response[f'scene {i}']['title']
 
     path_to_video = os.path.join(video_segments_folder,f'-Scene-{i}.mp4')
+    path_to_video = path_to_video.replace(r'\-', '/-')
 
     if title == 'none of the above':
       none_of_the_above.append(path_to_video)
@@ -802,5 +817,13 @@ def merge_videos(json_response):
   for txt in ['none_of_the_above','product_unboxing','feature_demonstration','final_verdict']:
     subprocess.run(['ffmpeg','-f','concat','-safe','0',
                   '-i',f'{txt}.txt',
-                    '-c:v','libx264','-c:a','aac',
+                    '-c:v','libx264','-c:a','aac','-strict','-2',
                   f'results/{txt}.mp4'])
+    
+
+# query = preprocess_prompt(system_prompt,'text_segments.txt')
+# # print(query)
+# json_response = generate_response(query)
+# merge_videos(video_segments_folder,json_response)
+
+# print(json_response)

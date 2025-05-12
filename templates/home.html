@@ -3,24 +3,26 @@
 {%block head%}
 <title>Video Uploader</title>
 <link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet">
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {%endblock%}
 
 {%block body%}
 <div class="header">
     <img src = "static\video.jpg" id="icon">
-    <h1 id = "webpage_title">Put Title Here</h1>
+    <h1 id = "webpage_title">FlashClips</h1>
 </div>
 
 <div class = "main">
     <div id = "box_1">
         <h5>AI powered highlights extractor</h5>
         <h1>Get the Video Highlights in a click</h1>
+        <p>Upload any product review video and get the highlights seamlessly  </p>
     </div>
 
     <div id ="box_2">
         {% if tasks[0] == True %}
-            <video controls>
+            <video controls id = 'video_preview'>
                 <source src ="{{url_for('static', filename = 'video/' + tasks[1])}}" type="video/mp4">
             </video>
         {% else %}
@@ -38,10 +40,18 @@
     </form>
     
 
-    <form action="/loading" >
-        <button id = "Extract_button"> Extract Highlights</button>
+    <form action="/loading">
+        <button id = "extract_button"> Extract Highlights</button>
     </form>
     
 </div>
+
+
+<div class="progress" id = "progress_container">
+    <div id = "myprogressBar"class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">0%</div>
+  </div>
+  
+<script type="text/javascript" src="{{ url_for('static', filename='js/loading.js') }}"></script>
+  
 
 {%endblock%}
