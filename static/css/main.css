@@ -1,13 +1,22 @@
 .header {
-    background-color:rgb(217, 234, 248);
+    background-color:rgb(243, 245, 246);
     display: flex;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     height: 75px;
     width: auto;
     text-align: left;
     /* image-rendering: auto; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
 }
 
+
+#webpage_title {
+    font-family: "Comfortaa", sans-serif;
+    /* font-optical-sizing: auto; */
+    font-weight: 900;
+    /* font-style: ; */
+}
 #icon {
     width: 50px;
     height: 50px;
@@ -93,6 +102,7 @@
     height:80%;
     object-fit: contain;
     margin-left: 60px;
+    border-radius: 10px;
     
 }
 
@@ -103,8 +113,8 @@
 
 
 #buttons {
-    margin-top: -250px;
-    margin-bottom: 100px;
+    margin-top: 65px;
+    /* margin-bottom: 100px; */
     /* background-color: aqua; */
     display: flex;
     /* gap: 10px; */
@@ -120,12 +130,21 @@
 #video_preview {
     width: 80%;
     height:80%;
-    object-fit: contain;
+    object-fit:contain;
+    border-radius: 50px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    background-color: black;
+}
+
+
+#video {
+    border-radius: 50px;
+    
 }
 
 #submit {
-    margin-left: 10px;
-    margin-right: 0px;
+    /* margin-left: 10px; */
+    margin-right: 12px;
     padding: 10px 20px;
     cursor: pointer;
     font-family: Arial, sans-serif;
@@ -148,8 +167,8 @@
 
 #custom_file_upload {
     /* border: 2px solid #4CAF50; */
-    margin-right: 0px;
-    margin-left: 150px;
+    margin-right: 12px;
+    /* margin-left: 150px; */
     padding: 10px 20px;
     cursor: pointer;
     font-family: Arial, sans-serif;
@@ -160,17 +179,33 @@
     border: none;
     color: white;
     text-align: center;
-    transition: background-color 0.3s ease;
 }
 #custom_file_upload:hover {
     background-color: rgb(117, 54, 244);
 }
 
+#submit_link_button {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    border-radius: 6px;
+    transition: background-color 0.3s ease; 
+    margin-top: 0px;
+    margin-left: 10px;
+    background-color: rgb(144, 97, 237);
+    border: none;
+    color: white;
+    text-align: center;
+}
+
+#submit_link_button:hover {
+    background-color: rgb(117, 54, 244);
+}
 
 #extract_button {
 
-    margin-left: 10px;
-    padding: 10px 20px;
+    margin-right: 12px;
+    padding: 12px 20px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
@@ -188,6 +223,10 @@
     background-color: rgb(117, 54, 244);
 }
 
+#link_submit_form {
+    margin-top: 50px;
+}
+
 
 
 #myprogressBar {
@@ -199,6 +238,8 @@
 #progress_container {
     margin-bottom: 50px;
     display: none;
+    margin-right: 150px;
+    margin-left: 150px;
 }
 
 

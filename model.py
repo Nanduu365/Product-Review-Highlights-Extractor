@@ -1010,7 +1010,7 @@ def generate_response(query, api_key = GOOGLE_API_KEY):
       contents = [query],
       config={
         "response_mime_type": "application/json",
-        "temperature": 0.3}
+        "temperature": 0.25}
   )
 
   json_response =json.loads(response.text)

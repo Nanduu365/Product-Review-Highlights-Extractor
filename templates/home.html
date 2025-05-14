@@ -2,14 +2,15 @@
 
 {%block head%}
 <title>Video Uploader</title>
-<link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Didact+Gothic" rel="stylesheet">  <!--Didactic Gothic google font-->
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Comfortaa:wght@300..700&family=Montserrat:ital@0;1&display=swap" rel="stylesheet"> <!--Comfortaa google font-->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 {%endblock%}
 
 {%block body%}
 <div class="header">
-    <img src = "static\video.jpg" id="icon">
+    <img src = "static\images\video.jpg" id="icon">
     <h1 id = "webpage_title">FlashClips</h1>
 </div>
 
@@ -17,34 +18,48 @@
     <div id = "box_1">
         <h5>AI powered highlights extractor</h5>
         <h1>Get the Video Highlights in a click</h1>
-        <p>Upload any product review video and get the highlights seamlessly  </p>
+        <p>Upload any product review video and get the highlights seamlessly. 
+            Paste the link, download and extract the highlights or upload your own video,
+            submit and extract the highlights  </p>
+
+        
+
+        <form action="/submit-url" method="POST" id ='link_submit_form'>
+            <label for="url">Enter a URL:</label>
+            <input type="url" id="url" name="url" required placeholder="Paste the URL here">
+            <button type="submit" id = 'submit_link_button'>Dowload and Show Preview</button>
+        </form>
+          
+
+
+        <div id = "buttons">
+            <label for="video_upload" id="custom_file_upload">
+                Upload Video
+            </label>
+            <form action = '/' method = 'POST' enctype="multipart/form-data">
+                <input type="file" id="video_upload" name="video" accept="video/*" required >
+                <input type="submit" value="Submit and Show Preview" id="submit"  required>
+            </form>
+            
+        
+            <form action="/loading">
+                <button id = "extract_button"> Extract Highlights</button>
+            </form>
+            
+        </div>
     </div>
 
     <div id ="box_2">
         {% if tasks[0] == True %}
             <video controls id = 'video_preview'>
-                <source src ="{{url_for('static', filename = 'video/' + tasks[1])}}" type="video/mp4">
+                <source src ="{{url_for('static', filename = 'video/' + tasks[1])}}" type="video/mp4" id = 'video'>
             </video>
         {% else %}
-            <img src="static/home_img.png" id="home_img">
+            <img src="static/images/home_img.png" id="home_img">
         {% endif %}
     </div>
 </div>
-<div id = "buttons">
-    <label for="video_upload" id="custom_file_upload">
-        Upload Video
-    </label>
-    <form action = '/' method = 'POST' enctype="multipart/form-data">
-        <input type="file" id="video_upload" name="video" accept="video/*" required >
-        <input type="submit" value="Submit and Show Preview" id="submit">
-    </form>
-    
 
-    <form action="/loading">
-        <button id = "extract_button"> Extract Highlights</button>
-    </form>
-    
-</div>
 
 
 <div class="progress" id = "progress_container">

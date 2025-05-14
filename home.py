@@ -3,8 +3,12 @@ from werkzeug.utils import secure_filename
 import os
 from threading import Thread
 import time
+from pytubefix import YouTube
+import contextlib
+import io
 from text_extraction import create_and_delete_folders, delete_files, VideoToTextExtractor
 from model import system_prompt, preprocess_prompt, generate_response, merge_videos
+
 
 
 app = Flask(__name__)
@@ -23,6 +27,19 @@ text_segments_file = 'text_segments.txt'
 create_and_delete_folders(['video_segments','audio_segments'])
 delete_files(['text_segments.txt'])
 
+def clean_up():
+    
+
+    folders = [app.config['UPLOAD_FOLDER'],app.config['RESULT_FOLDER']]
+
+    for folder in folders:
+        files = os.listdir(folder)
+
+        for file in files:
+            os.remove(os.path.join(folder,file))
+
+
+clean_up()
 bar = 0
 
 
@@ -38,10 +55,10 @@ def complete_process():
 
     extractor = VideoToTextExtractor()
     extractor.scene_extractor(video_path=video_path, output_dir=video_segments_folder)
-    bar = 25
+    bar = 35
 
     extractor.audio_extractor(audio_dir=audio_segments_folder, video_dir=video_segments_folder)
-    bar = 40
+    bar = 45
     extractor.text_from_audio(audio_dir= audio_segments_folder)
     bar = 70
 
@@ -49,25 +66,29 @@ def complete_process():
     query = preprocess_prompt(system_prompt, text_segments_file)
     bar = 75
     json_response = generate_response(query)
+    print(json_response)
     bar = 85
     merge_videos(video_segments_folder,json_response)
     bar = 100
 
 @app.route('/', methods = ['POST','GET'])
 def home():
-    clean_up()
-
-
+    
     if request.method == 'POST':
         video = request.files['video']
 
         filename = secure_filename(video.filename)
         filepath = 'static/video/' + filename
         video.save(filepath)
-        flag = True
+        
         
 
-        return render_template('home.html', tasks = [flag,filename])
+        return render_template('home.html', tasks = [True,filename])
+    
+    elif os.listdir('static/video'):
+        filename = os.listdir('static/video')[0]
+        return render_template('home.html', tasks = [True,filename])  #True and False indicate whether to show image or to show video in the home page
+
     
     else:
         return render_template('home.html', tasks=[False,None])
@@ -83,12 +104,13 @@ def load_results(filename):
 def loading():
     thread = Thread(target= complete_process)
     thread.start()
-    filename = os.listdir('static/video')[0]
 
     create_and_delete_folders(['video_segments','audio_segments'])
     delete_files(['text_segments.txt'])
 
-    return render_template('home.html', tasks = [True, filename])
+    filename = os.listdir('static/video')[0]
+
+    return render_template('home.html',tasks = [True,filename])
 
 
 @app.route('/update_value')
@@ -131,6 +153,51 @@ def highlights():
 
         return render_template('highlights.html', filenames = filenames, names = names)
 
+
+
+
+@app.route("/submit-url",methods = ['POST'])
+def submit_url():
+    if request.method == 'POST':
+        url = request.form['url']
+        download_video(url,output_path='static/video')
+
+        while os.listdir('static/video') == []:
+            time.sleep(2)
+
+    return redirect('/')
+
+
+
+
+
+def download_video(url, output_path):
+
+    #creating a buffer
+    buffer = io.StringIO()
+    try:
+        # Create a YouTube object with additional configuration
+        yt = YouTube(
+            url,
+            # use_oauth=True,
+            # allow_oauth_cache=True
+        )
+
+
+        # Get the lowest resolution stream
+        video_stream = yt.streams.get_by_resolution("360p")
+
+        # Download the video
+        print(f"Downloading: {yt.title}")
+        video_stream.download(output_path=output_path)
+        print("Download complete!")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+
+
+
 # def check_upload_status():
 #     global load
 #     while load != 1:
@@ -143,17 +210,7 @@ def highlights():
 #     thread_1 = Thread(target= check_upload_status)
 #     thread_1.start()
 
-def clean_up():
-    global load
-    load = 0
 
-    folders = [app.config['UPLOAD_FOLDER'],app.config['RESULT_FOLDER']]
-
-    for folder in folders:
-        files = os.listdir(folder)
-
-        for file in files:
-            os.remove(os.path.join(folder,file))
     
 
 def create_titles(names):
