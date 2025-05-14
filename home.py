@@ -104,17 +104,32 @@ def update_progress_bar():
 def highlights():
     # time.sleep(5)
     # return render_template('loaded.html')
+
+    
     filenames = os.listdir(app.config['RESULT_FOLDER'])
-    if filenames == []:
+    if os.listdir(app.config['RESULT_FOLDER']) == []:
         time.sleep(5)
         return "NO EXTRACTION POSSIBLE"
     else:
-        names = [name.split('.mp4')[0] for name in filenames if name.endswith('.mp4')]
-        names = create_titles(names)
-        sources = [url_for('load_results', filename=name) for name in filenames]
+
+        filenames = {}
+        for filename in os.listdir(app.config['RESULT_FOLDER']):
+            if filename.endswith('.mp4') and filename != 'none_of_the_above.mp4':
+                name = filename.split('.mp4')[0]
+                name = name.upper().replace('_', ' ')
+                source = url_for('load_results', filename=filename)
+
+                filenames[name] = source
+
+        
+        names = list(filenames.keys())
+
+        # names = [name.split('.mp4')[0] for name in filenames if name.endswith('.mp4')]
+        # names = create_titles(names)
+        # sources = [url_for('load_results', filename=name) for name in filenames]
         
 
-        return render_template('highlights.html', sources = sources, names = names)
+        return render_template('highlights.html', filenames = filenames, names = names)
 
 # def check_upload_status():
 #     global load

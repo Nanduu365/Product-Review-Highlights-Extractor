@@ -12,9 +12,9 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 # create_and_delete_folders(['video_segments','audio_segments'])
 # delete_files(['text_segments.txt'])
 
-# video_path = r'static\video\videoplayback.mp4'
-# video_segments_folder = 'video_segments'
-# audio_segments_folder = 'audio_segments'
+video_path = r'static\video\videoplayback.mp4'
+video_segments_folder = 'video_segments'
+audio_segments_folder = 'audio_segments'
 
 
 # extractor = VideoToTextExtractor()
@@ -26,8 +26,13 @@ GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 
 system_prompt  = '''
 
-Consider yourself as a person giving apt titles to conversations and your job is essentially to mark each paragraph as "product unboxing","feature demostration","
-final verdict" and "none of the above". You will be given examples and follow then and give the response.
+ou are an AI assistant that classifies scenes in a video based on their speech transcript.
+
+You must assign ONE of the following 4 titles to each scene:
+1. none of the above
+2. feature demonstration
+3. product unboxing
+4. final verdict
 
 EXAMPLE:
 
@@ -734,6 +739,248 @@ JSON Response:
 }
 
 
+EXAMPLE:
+
+scene 0:  
+scene 1:  
+scene 2:   Alright, I think we can make this pretty short and sweet.  The Mac team is on one.
+scene 3:   To the M4 Mac Mini Refreshed was already one of the best tech deals of all 2024, great computer, great price.  So now here.
+scene 4:   Here comes this new M4 MacBook Air.  It's the most capable, powerful version yet, obviously.
+scene 5:   to the new chip. The starting memory is 16 gigs. It gets a sneaky slightly larger battery,  some Thunderbolt improvements, a new webcam.
+scene 6:   And new color and the price goes down.
+scene 7:   It's kind of funny looking back a bit at the arc of reviewing MacBook Airs over the year.
+scene 8:   Like at first it was this spectacle of engineering, but also kind of in practical and missing a few ports.
+scene 9:   They went from that to being a bit of an outdated design, but improving a lot.
+scene 10:  Then turned into basically the easiest to recommend laptop in the world at 999 with
+scene 11:  Then, with Apple Silicon updates and higher base storage, the price did go up with the M2 generation by 200 bucks, so it was 11.99, and I feel like everyone just kind of went.  Alright, it's still fine. Yeah, it's still a good laptop for that price.
+scene 12:  But now it's 2025 and it's got the M4 chip  and the price has dropped back down to 999  for the base machine again, and that is...
+scene 13:   Now, almost nothing else has physically changed with the slap top.  Still the same keyboard, you know, there's no speaker grills.
+scene 14:   They're still max-safe charging, 2 USB-Type C ports.
+scene 15:   The headphone jack, the notch at the top of the...
+scene 16:   60 Hertz LCD, the thin and light aluminum build.  This is very,
+scene 17:   are still the MacBook Air. If you want to get sweaty about it, as they've 2D was
+scene 18:   the mute button icon is different and the webcam.
+scene 19:   is now a 12 megapixel center stage webcam, which can follow you around the frame if you leave  it on, but I actually do turn it off every time.  And also,
+scene 20:   So I noticed on Apple's website, the battery capacity went up slightly from 52.6 watt hours to 53.8 watt hours, this generation, so that's about 2% more capacity.
+scene 21:   Pay attention, okay. It's a real-life spot the difference is challenge, but really the main way obviously will know if it's the new laptop generation or not is this
+scene 22:   Did you notice it's a, it's a new color, uh, barely.
+scene 23:   It's called sky blue this time.  If I could rename it, I'd rename it.
+scene 24:   Barely blue considering when it's up against white backgrounds. Okay, it looks a little bit blue, but when it's up against actually blue things  It literally looks silver again. It's
+scene 25:   like the La Croix of Macbook Paint Colors.
+scene 26:   It's like someone whispered the word blue in the paint shop just before placing each one  in its box and shipping it away. But yeah, now you know if you see this pale blue color  on a MacBook Air, it notes the new one. This replaces Space Gray.
+scene 27:   But also speaking of boxes, this is the box that my MacBook Air came in from Apple, the review unit, and I don't know if you'd notice on the corner there.
+scene 28:   It appears someone has bled onto the box of this computer.  I don't really know how that happens.  I just pulled it out of the cardboard shipping box,  and it just looked like this.  Really weird, never seen that before.
+scene 29:   I really hope whoever package this computer is okay.  Anyway.
+scene 30:   But the main reason this laptop is such a big deal is the chip, right?  This M4 chip, it's...
+scene 31:   Really good. We already learned this from the M4 iPad Pro 9 months ago and then again with the M4 Mac Mini 4 months ago
+scene 32:   This chip in the laptop will be passively cooled, so no fans in the air on like the Mac Mini.  So, yeah, sustained performance ceiling is going to be a bit lower.
+scene 33:   But for the quick, bursty stuff, like normal computer activities, yeah, it's amazing, as expected.  And in the specific benefit in case you forgot of the M4 over previous generations of Apple Silicon,
+scene 34:   It's going to be more AI-specific horsepower, so more powerful 16-core neural engine.
+scene 35:   And some of that manifests itself in useless stuff like image playground, rendering images  locally faster than ever before, cool.
+scene 36:   But also some of that is potentially useful stuff like the background cutouts being quicker and more accurate or the same
+scene 37:   We'll click photo enhancer in Pixelmator Pro being much faster.
+scene 38:   reviewing MacBook Airs is so funny though because we do this every time.  This is the baseline.  This is the cheapest entry-level way to get a Mac laptop for people who don't care about  pro-level tasks. They're just going to check their email and  web browser and maybe edit a photo once in a while.  Basic stuff, MacBook Air, classic.  But because Apple Silicon has gotten so good, we end up  able to do things that are a way beyond that. This machine is capable of things that require  to pro-ship like a couple of years ago. That's not an exaggeration.
+scene 39:   So when I tell you I could load up a bunch of 4K and 8K footage into a final clip.
+scene 40:   That prototype line, and it would scrub through the timeline with almost no hesitation  at quarter-risk playback resolution, and then it could export the project  just a few beats slower than a Mac mini.
+scene 41:   That literally doesn't matter to 99% of MacBook Air buyers.
+scene 42:   But the chip is so powerful, it's capable of it, so it's just good to know that you could.
+scene 43:   You know, most airs will never have 3D modeling applications, or logic pro, or ever be  churning through the Adobe suite or plan.
+scene 44:   on AAA games, but instead they'll be doing video calls and having 20 safari tabs open  and we're flipping through a bunch of productivity apps.
+scene 45:   But it is pretty sick that this computer can stretch  and handle all of that.  So do you choose to throw that at it?  That is the modern MacBook Air.  There's even a allegedly a customer  that was frustrated with the last generation of air,  because it couldn't connect two different six K displays  at the same time and use them with the lid open.  And so now, this one can.
+scene 46:   It's okay, great. This laptop is still a great machine and a great deal.  Here's my only complaint, potentially, with this laptop.  I would like a better display.  Now, I know that I'm coming from a MacBook Pro, and I'm very used to these really good displays,  and it seems like Apple is as they usually do,  observing certain things for the pros, so the mini LED.
+scene 47:   the pro-res high refresh rate even the nanotextre coating on the display.
+scene 48:   All that stuff is reserved for the MacBook Pro, but all that is stuff that I would like to see in a MacBook Air.  And I think I could handle it. I think it's got plenty of battery. It's got it could go brighter. It could look even better.  So I want a better screen on the MacBook Air, me personally as an option, but I, again, I know that most people won't even notice and will be totally fine with this.
+scene 49:   Here's a more important question that I ask basically every year with this MacBook Pro,  because we always talk about this base price.  Can you actually order the base price spec and still be fine?  And this year, again, I feel like for most people, the answer actually is yes.
+scene 50:   because this time that's 16 gigs of unified memory and then it's 256 gigs of base storage.  So the storage and memory upgrades are always borderline robbery. That's not a shocker.  Like, I do like that you can get a much faster charger for 20 bucks if you don't already have one.  But yeah.
+scene 51:   Doubling up to 16 gigs based for 999 is huge since these computers can go to SWAT memory so quickly.
+scene 52:   Shout out to the single best feature of Apple Intelligence, which has been improving the  matter of RAM in every Apple device.
+scene 53:   If you are in the market for a base machine, though, I think if you don't plan on ever doing  super high-end tasks, you can still consider the last gen that is going to sound familiar,  but the last gen is also a really good deal.  It has half that memory eight gigs, but it's...
+scene 54:   The 99 had best by right now.
+scene 55:   So that's a really good deal. Obviously, if you have an older MacBook, if you have an Intel MacBook,  this is the type of stuff you're going to be looking at. Otherwise then, yeah, pretty easy  to recommend the baseline, the new entry level sky blue MacBook Air.
+scene 56:   All things considered it's pretty boring that this laptop doesn't change very much,  and it's just a barely new color, and it's a chip we've already seen before.  But I think it's pretty exciting that laptops have gotten this good period.  Thanks for watching.  Catch you guys in the next one. Peace.
+scene 57:   Thanks for watching, and I'll see you in the next video!
+
+
+
+JSON Response:
+{
+  "scene 0": {
+    "title": "none of the above"
+  },
+  "scene 1": {
+    "title": "none of the above"
+  },
+  "scene 2": {
+    "title": "none of the above"
+  },
+  "scene 3": {
+    "title": "none of the above"
+  },
+  "scene 4": {
+    "title": "product_unboxing"
+  },
+  "scene 5": {
+    "title": "feature demonstration"
+  },
+  "scene 6": {
+    "title": "feature demonstration"
+  },
+  "scene 7": {
+    "title": "none of the above"
+  },
+  "scene 8": {
+    "title": "none of the above"
+  },
+  "scene 9": {
+    "title": "none of the above"
+  },
+  "scene 10": {
+    "title": "none of the above"
+  },
+  "scene 11": {
+    "title": "none of the above"
+  },
+  "scene 12": {
+    "title": "feature demonstration"
+  },
+  "scene 13": {
+    "title": "feature demonstration"
+  },
+  "scene 14": {
+    "title": "feature demonstration"
+  },
+  "scene 15": {
+    "title": "feature demonstration"
+  },
+  "scene 16": {
+    "title": "feature demonstration"
+  },
+  "scene 17": {
+    "title": "feature demonstration"
+  },
+  "scene 18": {
+    "title": "feature demonstration"
+  },
+  "scene 19": {
+    "title": "feature demonstration"
+  },
+  "scene 20": {
+    "title": "feature demonstration"
+  },
+  "scene 21": {
+    "title": "none of the above"
+  },
+  "scene 22": {
+    "title": "feature demonstration"
+  },
+  "scene 23": {
+    "title": "none of the above"
+  },
+  "scene 24": {
+    "title": "feature demonstration"
+  },
+  "scene 25": {
+    "title": "none of the above"
+  },
+  "scene 26": {
+    "title": "none of the above"
+  },
+  "scene 27": {
+    "title": "none of the above"
+  },
+  "scene 28": {
+    "title": "none of the above"
+  },
+  "scene 29": {
+    "title": "none of the above"
+  },
+  "scene 30": {
+    "title": "feature demonstration"
+  },
+  "scene 31": {
+    "title": "feature demonstration"
+  },
+  "scene 32": {
+    "title": "feature demonstration"
+  },
+  "scene 33": {
+    "title": "feature demonstration"
+  },
+  "scene 34": {
+    "title": "feature demonstration"
+  },
+  "scene 35": {
+    "title": "feature demonstration"
+  },
+  "scene 36": {
+    "title": "feature demonstration"
+  },
+  "scene 37": {
+    "title": "feature demonstration"
+  },
+  "scene 38": {
+    "title": "final verdict"
+  },
+  "scene 39": {
+    "title": "final verdict"
+  },
+  "scene 40": {
+    "title": "final verdict"
+  },
+  "scene 41": {
+    "title": "final verdict"
+  },
+  "scene 42": {
+    "title": "none of the above"
+  },
+  "scene 43": {
+    "title": "feature demonstration"
+  },
+  "scene 44": {
+    "title": "feature demonstration"
+  },
+  "scene 45": {
+    "title": "none of the above"
+  },
+  "scene 46": {
+    "title": "final verdict"
+  },
+  "scene 47": {
+    "title": "final verdict"
+  },
+  "scene 48": {
+    "title": "final verdict"
+  },
+  "scene 49": {
+    "title": "final verdict"
+  },
+  "scene 50": {
+    "title": "final verdict"
+  },
+  "scene 51": {
+    "title": "none of the above"
+  },
+  "scene 52": {
+    "title": "final verdict"
+  },
+  "scene 53": {
+    "title": "final verdict"
+  },
+  "scene 54": {
+    "title": "final verdict"
+  },
+  "scene 55": {
+    "title": "final verdict"
+  },
+  "scene 56": {
+    "title": "final verdict"
+  },
+  "scene 57": {
+    "title": "none of the above"
+  }
+}
+
+
 USER:
 
 '''
@@ -759,7 +1006,7 @@ def generate_response(query, api_key = GOOGLE_API_KEY):
   client = genai.Client(api_key = api_key)
 
   response = client.models.generate_content(
-      model = "gemini-2.0-flash",
+      model = "gemini-2.5-flash-preview-04-17",
       contents = [query],
       config={
         "response_mime_type": "application/json",
@@ -782,11 +1029,12 @@ def merge_videos(video_segments_folder,json_response):
   final_verdict = []
 
 
-  for i in range(len(json_response)):
+  for i in range(len(os.listdir(video_segments_folder))):
     title = json_response[f'scene {i}']['title']
+    print(f'\r{i}', end = '')
 
     path_to_video = os.path.join(video_segments_folder,f'-Scene-{i}.mp4')
-    path_to_video = path_to_video.replace(r'\-', '/-')
+    # path_to_video = path_to_video.replace(r'\-', '/-')
 
     if title == 'none of the above':
       none_of_the_above.append(path_to_video)
@@ -798,32 +1046,51 @@ def merge_videos(video_segments_folder,json_response):
       final_verdict.append(path_to_video)
 
 
-  with open('none_of_the_above.txt','w') as f:
+  with open(r'join_videos\none_of_the_above.txt','w') as f:
     for path in none_of_the_above:
       f.write(f"file '{path}'\n")
 
-  with open('product_unboxing.txt','w') as f:
+  with open(r'join_videos\product_unboxing.txt','w') as f: 
     for path in product_unboxing:
       f.write(f"file '{path}'\n")
 
-  with open('feature_demonstration.txt','w') as f:
+  with open(r'join_videos\feature_demonstration.txt','w') as f:
     for path in feature_demonstration:
       f.write(f"file '{path}'\n")
 
-  with open('final_verdict.txt','w') as f:
+  with open(r'join_videos\final_verdict.txt','w') as f:
     for path in final_verdict:
       f.write(f"file '{path}'\n")
 
   for txt in ['none_of_the_above','product_unboxing','feature_demonstration','final_verdict']:
-    subprocess.run(['ffmpeg','-f','concat','-safe','0',
-                  '-i',f'{txt}.txt',
-                    '-c:v','libx264','-c:a','aac','-strict','-2',
-                  f'results/{txt}.mp4'])
+    # subprocess.run(['ffmpeg','-f','concat','-safe','0',
+    #               '-i',f'{txt}.txt',
+    #                 '-c:v','libx264','-c:a','aac','-strict','-2',
+    #               f'results/{txt}.mp4'])
+
+      subprocess.run([
+      'ffmpeg',
+      '-safe', '0',
+      '-f', 'concat',
+      '-i', rf'join_videos\{txt}.txt',
+      '-vsync', 'vfr',
+      '-c:v', 'libx264',
+      '-preset', 'fast',
+      '-crf', '23',
+      '-c:a', 'libvo_aacenc',
+      '-b:a', '192k',
+      f'results/{txt}.mp4'
+      ])
+
+
     
 
 # query = preprocess_prompt(system_prompt,'text_segments.txt')
 # # print(query)
 # json_response = generate_response(query)
+# print(json_response)
+
+
 # merge_videos(video_segments_folder,json_response)
 
 # print(json_response)

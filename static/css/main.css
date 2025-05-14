@@ -192,12 +192,13 @@
 
 #myprogressBar {
     width: 0%;
-    display: none;
+    /* display: none; */
     /* height: 20px;  */
   } 
 
 #progress_container {
     margin-bottom: 50px;
+    display: none;
 }
 
 

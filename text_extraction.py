@@ -10,6 +10,7 @@ from faster_whisper import WhisperModel
 import json
 from math import log10
 import shutil
+from natsort import natsorted  #natural sorting
 
 # import logging
 # logging.basicConfig(level= logging.DEBUG)
@@ -69,7 +70,7 @@ class VideoToTextExtractor():
 
         print('Extracting Scenes.....')
         scene_list = detect(video_path, AdaptiveDetector())
-        
+        print(scene_list)
         if scene_list:
             for i,scene in enumerate(scene_list):
                 start_time = scene[0].get_timecode()
@@ -77,7 +78,23 @@ class VideoToTextExtractor():
                 output_pattern = f'video_segments/-Scene-{i}.mp4'
 
                 
-                split_video_ffmpeg(video_path, scene_list, output_dir='video_segments')
+                subprocess.run([
+                                'ffmpeg',
+                                '-i', video_path,
+                                '-ss', str(start_time),
+                                '-to', str(end_time),
+                                '-c:v', 'libx264',
+                                '-preset', 'fast',
+                                '-crf', '23',
+                                '-c:a', 'libvo_aacenc',
+                                '-b:a', '192k',
+                                output_pattern
+                            ])
+
+
+                # subprocess.run([
+                #     'ffmpeg','-i',video_path,'-ss',str(start_time),'-to',str(end_time),'-c','copy', output_pattern
+                # ])
                 # subprocess.run([
                 #     'ffmpeg','-loglevel', 'error','-i', video_path,'-ss',str(start_time),
                 #     '-to',str(end_time),'-c','copy',output_pattern
@@ -91,7 +108,7 @@ class VideoToTextExtractor():
 
             subprocess.run([
                 'ffmpeg','-i',video_path,'-c','copy', 
-                '-f','segment','segment_time',str(segment_time),output_pattern
+                '-f','segment','segment_time',str(segment_time),'-f','mp4',output_pattern
             ])
             self.flag = False #setting flag to false , indicating we have used video segmantation and the scene extraction failed
 
@@ -154,11 +171,13 @@ class VideoToTextExtractor():
         model = WhisperModel('tiny', compute_type='int8')
         text_segments_file = 'text_segments.txt'
 
-        sorted_audio_names = sorted(os.listdir(audio_dir))
+        sorted_audio_names = natsorted(os.listdir(audio_dir))
 
         if not os.path.exists(text_segments_file):
                 with open(text_segments_file,'w') as f:
                     pass
+        
+        print(sorted_audio_names)
 
         for i,audio in enumerate(sorted_audio_names):
             audio_path = os.path.join(audio_dir,audio)
