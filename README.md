@@ -10,25 +10,46 @@
 *https://drive.google.com/file/d/1OovmOl4DzIVPR-5rJ0K_Tm6_YnpTVUYm/view?usp=sharing*
 
 **PROJECT STRUCTURE**
-|----- audio_segments
+|----- audio_segments 
+
 |----- join_videos
+
 |----- results
+
 |----- sample_video
+
 |----- results
+
 |----- static
+
        |------css
+
               |------highlights.css
+
               |------main.css
+
        |------js
+
               |------loading.js
+
        |------images
+
        |------videos
+
 |----- templates
+
        |------base.html
+
        |------home.html
+
        |------highlights.html
+
 |----- video_segments
+
 |----- home.py
+
 |----- model.py
+
 |----- text_extraction.py
+
 |----- requirements.txt
