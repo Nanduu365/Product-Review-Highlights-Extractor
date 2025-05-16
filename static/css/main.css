@@ -100,9 +100,12 @@
 #home_img {
     width: 80%;
     height:80%;
-    object-fit: contain;
+    object-fit: fill;
     margin-left: 60px;
     border-radius: 10px;
+    border-radius: 50px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
     
 }
 
@@ -113,7 +116,7 @@
 
 
 #buttons {
-    margin-top: 65px;
+    margin-top: 50px;
     /* margin-bottom: 100px; */
     /* background-color: aqua; */
     display: flex;
@@ -145,7 +148,7 @@
 #submit {
     /* margin-left: 10px; */
     margin-right: 12px;
-    padding: 10px 20px;
+    padding: 8px 12px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
@@ -169,7 +172,7 @@
     /* border: 2px solid #4CAF50; */
     margin-right: 12px;
     /* margin-left: 150px; */
-    padding: 10px 20px;
+    padding: 8px 12px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
@@ -185,7 +188,7 @@
 }
 
 #submit_link_button {
-    padding: 10px 20px;
+    padding: 8px 12px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
@@ -203,9 +206,9 @@
 }
 
 #extract_button {
-
+    margin-left: 30px;
     margin-right: 12px;
-    padding: 12px 20px;
+    padding: 10px 12px;
     cursor: pointer;
     font-family: Arial, sans-serif;
     border-radius: 6px;
@@ -224,7 +227,7 @@
 }
 
 #link_submit_form {
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 
@@ -236,7 +239,7 @@
   } 
 
 #progress_container {
-    margin-bottom: 50px;
+    margin-bottom: 70px;
     display: none;
     margin-right: 150px;
     margin-left: 150px;

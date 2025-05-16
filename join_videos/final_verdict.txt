@@ -1,6 +1,0 @@
-file 'video_segments\-Scene-107.mp4'
-file 'video_segments\-Scene-108.mp4'
-file 'video_segments\-Scene-109.mp4'
-file 'video_segments\-Scene-110.mp4'
-file 'video_segments\-Scene-111.mp4'
-file 'video_segments\-Scene-170.mp4'

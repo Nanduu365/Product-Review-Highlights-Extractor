@@ -985,35 +985,36 @@ USER:
 
 '''
 
-def preprocess_prompt(system_prompt, text_segments_file):
+def preprocess_prompt(system_prompt, text_segments_file, event):
     '''Take the text from txt file and format it in a properform for 
     making the prompt for model'''
+    if not event.is_set():
+      with open(text_segments_file, 'r') as f:
+          lines = f.readlines()
 
-    with open(text_segments_file, 'r') as f:
-        lines = f.readlines()
-
-    user_prompt = [ f'scene {i}:' + line  for i,line in enumerate(lines)]
-    user_prompt = "".join(user_prompt) # \n is already there, so no space is added for the join
-    # print(lines)
-    print(f'Total No of scenes : {len(lines)}')
+      # user_prompt = [ f'scene {i}:' + line  for i,line in enumerate(lines)]
+      user_prompt = "".join(lines) # \n is already there, so no space is added for the join
+      # print(lines)
+      print(f'Total No of scenes : {len(lines)}')
 
     return system_prompt+user_prompt
     
 
-def generate_response(query, api_key = GOOGLE_API_KEY):
+def generate_response(query, event,api_key = GOOGLE_API_KEY):
 
-  # print(query)
-  client = genai.Client(api_key = api_key)
+  if not event.is_set():
+    # print(query)
+    client = genai.Client(api_key = api_key)
 
-  response = client.models.generate_content(
-      model = "gemini-2.5-flash-preview-04-17",
-      contents = [query],
-      config={
-        "response_mime_type": "application/json",
-        "temperature": 0.25}
-  )
+    response = client.models.generate_content(
+        model = "gemini-2.5-flash-preview-04-17",
+        contents = [query],
+        config={
+          "response_mime_type": "application/json",
+          "temperature": 0.2}
+    )
 
-  json_response =json.loads(response.text)
+    json_response =json.loads(response.text)
 
   return json_response
   
@@ -1021,7 +1022,7 @@ def generate_response(query, api_key = GOOGLE_API_KEY):
 
 #Scene by scene video collection from text
 
-def merge_videos(video_segments_folder,json_response):
+def merge_videos(video_segments_folder,json_response, event):
 
   none_of_the_above = []
   feature_demonstration = []
@@ -1030,20 +1031,22 @@ def merge_videos(video_segments_folder,json_response):
 
 
   for i in range(len(os.listdir(video_segments_folder))):
-    title = json_response[f'scene {i}']['title']
-    print(f'\r{i}', end = '')
 
-    path_to_video = os.path.join(video_segments_folder,f'-Scene-{i}.mp4')
-    # path_to_video = path_to_video.replace(r'\-', '/-')
+    if not event.is_set():
+      title = json_response[f'scene {i}']['title']
+      print(f'\r{i}', end = '')
 
-    if title == 'none of the above':
-      none_of_the_above.append(path_to_video)
-    elif title == 'feature demonstration':
-      feature_demonstration.append(path_to_video)
-    elif title == 'product unboxing':
-      product_unboxing.append(path_to_video)
-    elif title == 'final verdict':
-      final_verdict.append(path_to_video)
+      path_to_video = os.path.join(video_segments_folder,f'-Scene-{i}.mp4')
+      # path_to_video = path_to_video.replace(r'\-', '/-')
+
+      if title == 'none of the above':
+        none_of_the_above.append(path_to_video)
+      elif title == 'feature demonstration':
+        feature_demonstration.append(path_to_video)
+      elif title == 'product unboxing':
+        product_unboxing.append(path_to_video)
+      elif title == 'final verdict':
+        final_verdict.append(path_to_video)
 
 
   with open(r'join_videos\none_of_the_above.txt','w') as f:
@@ -1067,7 +1070,7 @@ def merge_videos(video_segments_folder,json_response):
     #               '-i',f'{txt}.txt',
     #                 '-c:v','libx264','-c:a','aac','-strict','-2',
     #               f'results/{txt}.mp4'])
-
+    if not event.is_set():
       subprocess.run([
       'ffmpeg',
       '-safe', '0',
