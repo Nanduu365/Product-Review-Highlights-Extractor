@@ -10,8 +10,8 @@
 *https://drive.google.com/file/d/1OovmOl4DzIVPR-5rJ0K_Tm6_YnpTVUYm/view?usp=sharing*
 
 **PROJECT STRUCTURE**
-|----- audio_segments 
 
+|----- audio_segments \n
 |----- join_videos
 
 |----- results
