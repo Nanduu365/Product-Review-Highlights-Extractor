@@ -1,5 +1,5 @@
 **URL to the site**
-*https://product-review-highlights-extractor.onrender.com*
+*https://flashclips.onrender.com*
 
 **Sample link for trying out the app**
 *https://www.youtube.com/watch?v=vT3FjSBqYfs*  ---- Copy and paste this in the website to see the app in action
