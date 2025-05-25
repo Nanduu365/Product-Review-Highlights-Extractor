@@ -81,3 +81,22 @@
     # pool = Pool(processes=3)
     # pool.starmap(extract_scene,numbered_scene_list)
 
+
+from pytubefix import YouTube
+url = 'https://www.youtube.com/watch?v=MRtg6A1f2Ko&t=22s'
+try:
+    # Create a YouTube object with additional configuration
+    yt = YouTube(
+        url,
+        # use_oauth=True,
+        # allow_oauth_cache=True
+    )
+    # Get the lowest resolution stream
+    video_stream = yt.streams.get_by_resolution("360p")
+
+    # Download the video
+    # print(f"Downloading: {yt.title}")
+    video_stream.download(output_path='static/video')
+    # print("Download complete!")
+except Exception as e:
+    print(f"An error occurred: {e}")
