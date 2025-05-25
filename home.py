@@ -38,7 +38,7 @@ os.makedirs(RESULT_FOLDER, exist_ok=True)
 
 #Defining Functions needed
 
-def clean_up(folders = [app.config['UPLOAD_FOLDER'],app.config['RESULT_FOLDER']]):
+def clean_up(folders = [app.config['UPLOAD_FOLDER'],app.config['RESULT_FOLDER'], video_segments_folder, audio_segments_folder]):
     '''Clean up the existing upload and result folder while the website is loading'''
    
     for folder in folders:
