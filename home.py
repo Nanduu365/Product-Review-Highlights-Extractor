@@ -12,10 +12,15 @@ from model import system_prompt, preprocess_prompt, generate_response, merge_vid
 
 
 app = Flask(__name__)
+
 UPLOAD_FOLDER = 'static/video'
 RESULT_FOLDER = 'results'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['RESULT_FOLDER'] = RESULT_FOLDER
+video_segments_folder = r'video_segments'
+audio_segments_folder = r'audio_segments'
+os.makedirs(video_segments_folder, exist_ok=True)
+os.makedirs(audio_segments_folder, exist_ok=True)
 text_segments_file = 'text_segments.txt'
 
 
@@ -72,10 +77,7 @@ def complete_process():
 
     video_names = os.listdir('static/video')
     video_path = rf"{app.config['UPLOAD_FOLDER']}\\{video_names[0]}"
-    video_segments_folder = r'video_segments'
-    audio_segments_folder = r'audio_segments'
-    os.makedirs(video_segments_folder, exist_ok=True)
-    os.makedirs(audio_segments_folder, exist_ok=True)
+
     bar = 10
 
     if not main_event.is_set():
