@@ -198,6 +198,7 @@ def highlights():
 
 @app.route("/submit-url",methods = ['POST'])
 def submit_url():
+    clean_up(folders=['static/video'])
     if request.method == 'POST':
         url = request.form['url']
         download_video(url,output_path='static/video')

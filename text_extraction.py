@@ -3,15 +3,10 @@ import ffmpeg
 
 import os
 import subprocess
-import re
 from joblib import Parallel, delayed
 from math import floor
 
 from faster_whisper import WhisperModel
-
-import json
-from math import log10
-import shutil
 from natsort import natsorted  #natural sorting
 
 
